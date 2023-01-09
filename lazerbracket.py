@@ -49,10 +49,20 @@ def generate_lazer_bracket(config: ConfigParser):
         print("The number of players is not power of 2!")
         exit()
 
+    # de: double elimination
     de = input("Is the tournament double elimination? (y/n): ")
     if de == "y":
         de = True
         roundnames = roundnames[1]
+
+        print("(for tournaments where there are players starting from the losers round)")
+        # fwl: first week losers
+        fwl = input("Add losers bracket matches for the first week? (y/n): ")
+        if fwl == "y":
+            fwl = True
+            players = players // 2
+        else:
+            fwl = False
     else:
         de = False
         roundnames = roundnames[0]
@@ -75,7 +85,7 @@ def generate_lazer_bracket(config: ConfigParser):
             "Description": f"Week {week}",
             "BestOf": 0,
             "Beatmaps": [],
-            "StartDate": "2023-01-21T00:00:00Z",
+            "StartDate": "2023-01-01T00:00:00Z",
             "Matches": []
         })
 
@@ -85,16 +95,17 @@ def generate_lazer_bracket(config: ConfigParser):
             position[0] -= 100
             position[1] = winnerYorigin + 100 * int(math.pow(2, week-3)) - 50
             matches["Matches"].append(lazer_match(id, False, position))
-            rounds["Rounds"][-1]["Matches"].append(id)
+            rounds["Rounds"][-1]["Matches"].append(id)  # grand final
             id += 1
             position[0] += 200
             matches["Matches"].append(lazer_match(id, False, position))
-            rounds["Rounds"][-1]["Matches"].append(id)
+            rounds["Rounds"][-1]["Matches"].append(id)  # bracket reset
             id += 1
             position[0] -= 200
-            position[1] = loserYorigin + 100 * int(math.pow(2, week-4)) - 50
+            position[1] = loserYorigin + 100 * \
+                int(math.pow(2, week-(4-fwl))) - 50
             matches["Matches"].append(lazer_match(id, True, position))
-            rounds["Rounds"][-1]["Matches"].append(id)
+            rounds["Rounds"][-1]["Matches"].append(id)  # losers final
             id += 1
             break
 
@@ -113,30 +124,30 @@ def generate_lazer_bracket(config: ConfigParser):
             loserYorigin = position[1] + 200
 
         # generte loser bracket matches
-        if week >= 2 and de:  # not creating losers bracket matches first week
+        if de and week >= 2-fwl:
             position[0] -= 500
             position[1] = loserYorigin
 
-            # phase 1: week 3 or later
-            if week != 2:
-                if week != 3:
-                    position[1] += 100 * int(math.pow(2, week-4)) - 50
+            # phase 1: week 3 or later, week 2 or later for fwl
+            if week != 2-fwl:
+                if week != 3-fwl:
+                    position[1] += 100 * int(math.pow(2, week-(4-fwl))) - 50
                 for i in range(n):
                     matches["Matches"].append(lazer_match(id, True, position))
                     rounds["Rounds"][-1]["Matches"].append(id)
                     id += 1
-                    position[1] += 100 * int(math.pow(2, week-3))
+                    position[1] += 100 * int(math.pow(2, week-(3-fwl)))
             position[0] += 200
 
             # phase 2
             position[1] = loserYorigin
-            if week != 2:
-                position[1] += 100 * int(math.pow(2, week-3)) - 50
+            if week != 2-fwl:
+                position[1] += 100 * int(math.pow(2, week-(3-fwl))) - 50
             for i in range(n//2):
                 matches["Matches"].append(lazer_match(id, True, position))
                 rounds["Rounds"][-1]["Matches"].append(id)
                 id += 1
-                position[1] += 100 * int(math.pow(2, week-2))
+                position[1] += 100 * int(math.pow(2, week-(2-fwl)))
             position[0] += 300
 
         # for next round
