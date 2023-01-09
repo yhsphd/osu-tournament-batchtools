@@ -4,7 +4,7 @@ import os
 
 
 def generate_lazer_teams(config: ConfigParser):
-    WORKING_FOLDER = config["paths"]["working_folder"].rstrip("/")
+    WORKING_FOLDER = "working folders/" + config["paths"]["working_folder"].rstrip("/")
 
     teams = {
         "Teams": []

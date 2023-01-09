@@ -24,7 +24,7 @@ def lazer_match(id: int, losers: bool, position: list):
 
 
 def generate_lazer_bracket(config: ConfigParser):
-    WORKING_FOLDER = config["paths"]["working_folder"].rstrip("/")
+    WORKING_FOLDER = "working folders/" + config["paths"]["working_folder"].rstrip("/")
 
     rounds = {
         "Rounds": []

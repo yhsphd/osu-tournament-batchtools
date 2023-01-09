@@ -5,7 +5,7 @@ def create_config():
     config = ConfigParser()
 
     config["paths"] = {
-        "working_folder": "working folder"
+        "working_folder": "default"
     }
     config["api"] = {
         "api_url": "https://osu.ppy.sh/api/v2",

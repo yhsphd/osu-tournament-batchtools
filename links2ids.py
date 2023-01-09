@@ -3,7 +3,7 @@ from configparser import ConfigParser
 
 
 def links2ids(config: ConfigParser):
-    WORKING_FOLDER = config["paths"]["working_folder"].rstrip("/")
+    WORKING_FOLDER = "working folders/" + config["paths"]["working_folder"].rstrip("/")
 
     content = ""
 

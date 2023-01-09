@@ -4,7 +4,7 @@ import requests
 
 
 def download_pfps(config: ConfigParser):
-    WORKING_FOLDER = config["paths"]["working_folder"].rstrip("/")
+    WORKING_FOLDER = "working folders/" + config["paths"]["working_folder"].rstrip("/")
 
     if not os.path.exists(f"{WORKING_FOLDER}/pfps"):
         os.makedirs(f"{WORKING_FOLDER}/pfps")

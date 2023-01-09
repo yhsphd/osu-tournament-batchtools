@@ -30,7 +30,7 @@ def get_players_info(config: ConfigParser, mode: int):
         mode (int): 0 to get players' ids and 1 to get players' nicknames
     """
 
-    WORKING_FOLDER = config["paths"]["working_folder"].rstrip("/")
+    WORKING_FOLDER = "working folders/" + config["paths"]["working_folder"].rstrip("/")
     MODE = config["osu"]["mode"]
     API_URL = config["api"]["api_url"].rstrip("/")
 

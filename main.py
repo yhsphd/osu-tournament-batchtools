@@ -23,7 +23,9 @@ def main():
             create_config()
         config.read("settings.ini")
 
-        WORKING_FOLDER = config["paths"]["working_folder"].rstrip("/")
+        WORKING_FOLDER = "working folders/" + config["paths"]["working_folder"].rstrip("/")
+        if not os.path.exists(WORKING_FOLDER):
+            os.makedirs(WORKING_FOLDER)
 
         print()
         print("-"*41)
@@ -66,10 +68,9 @@ def main():
         elif choice == "6":
             generate_lazer_bracket(config)
         elif choice == "a":
-            change_working_folder(config, input(
-                "Please type the name of the working folder: "))
+            change_working_folder(config)
             config.read("settings.ini")
-            WORKING_FOLDER = config["paths"]["working_folder"].rstrip("/")
+            WORKING_FOLDER = "working folders/" + config["paths"]["working_folder"].rstrip("/")
         elif choice == "q":
             exit()
 
