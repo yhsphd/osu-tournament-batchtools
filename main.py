@@ -57,7 +57,7 @@ def main():
         if choice == "1":
             get_players_info(config, 0)
         elif choice == "2":
-            links2ids()
+            links2ids(config)
             get_players_info(config, 0)
         elif choice == "3":
             get_players_info(config, 1)
