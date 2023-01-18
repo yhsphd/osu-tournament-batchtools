@@ -30,11 +30,13 @@ def get_players_info(config: ConfigParser, mode: int):
         mode (int): 0 to get players' ids and 1 to get players' nicknames
     """
 
-    WORKING_FOLDER = "working folders/" + config["paths"]["working_folder"].rstrip("/")
+    WORKING_FOLDER = "working folders/" + \
+        config["paths"]["working_folder"].rstrip("/")
     MODE = config["osu"]["mode"]
     API_URL = config["api"]["api_url"].rstrip("/")
 
-    playerlist = []
+    nicklist = []
+    idlist = []
     playersinfo = {
         "users": []
     }
@@ -42,19 +44,22 @@ def get_players_info(config: ConfigParser, mode: int):
     headers = get_token(config)
 
     if mode == 0:     # id list
-        nicklist = []
-
         with open(f"./{WORKING_FOLDER}/ids.csv", "r") as f:
-            playerlist = f.read().rstrip().split("\n")
+            idlist = f.read().rstrip().split("\n")
 
-        for i in range(len(playerlist)):
+        for i in range(len(idlist)):
             response = requests.get(
-                f"{API_URL}/users/{playerlist[i]}/{MODE}", headers=headers).json()
-            nicklist.append(response["username"])
+                f"{API_URL}/users/{idlist[i]}/{MODE}", headers=headers).json()
             playersinfo["users"].append(response)
+            try:
+                nicklist.append(response["username"])
+            except KeyError:
+                nicklist.append("")
+                print(
+                    f"No key named 'username' for player {idlist[i]}. osu! api response:\n{json.dumps(response, indent=2)}")
             print(end="\x1b[2K")
             print(
-                f"{i+1}/{len(playerlist)} downloaded! ({response['username']})", end="\r")
+                f"{i+1}/{len(idlist)} downloaded! ({nicklist[i]})", end="\r")
         print()
 
         # generate nicks.csv
@@ -62,19 +67,22 @@ def get_players_info(config: ConfigParser, mode: int):
             f.write("\n".join(nicklist))
 
     elif mode == 1:   # nick list
-        idlist = []
-
         with open(f"./{WORKING_FOLDER}/nicks.csv", "r") as f:
-            playerlist = f.read().rstrip().split("\n")
+            nicklist = f.read().rstrip().split("\n")
 
-        for i in range(len(playerlist)):
+        for i in range(len(nicklist)):
             response = requests.get(
-                f"{API_URL}/users/{playerlist[i]}/{MODE}?key=asdf", headers=headers).json()
-            idlist.append(response["id"])
+                f"{API_URL}/users/{nicklist[i]}/{MODE}?key=asdf", headers=headers).json()
+            try:
+                idlist.append(response["id"])
+            except KeyError:
+                idlist.append(0)
+                print(
+                    f"No key named 'id' for player {nicklist[i]}. osu! api response:\n{json.dumps(response, indent=2)}")
             playersinfo["users"].append(response)
             print(end="\x1b[2K")
             print(
-                f"{i+1}/{len(playerlist)} downloaded! ({response['username']})", end="\r")
+                f"{i+1}/{len(nicklist)} downloaded! ({nicklist[i]})", end="\r")
         print()
 
         # generate ids.csv
@@ -84,8 +92,8 @@ def get_players_info(config: ConfigParser, mode: int):
     # generate links.csv
     with open(f"{WORKING_FOLDER}/links.csv", "w") as f:
         text2write = ""
-        for playerinfo in playersinfo["users"]:
-            text2write += f"https://osu.ppy.sh/users/{playerinfo['id']}\n"
+        for id in idlist:
+            text2write += f"https://osu.ppy.sh/users/{id}\n"
         f.write(text2write.rstrip())
 
     # got all information
