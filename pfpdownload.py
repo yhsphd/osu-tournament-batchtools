@@ -29,5 +29,5 @@ def download_pfps(config: ConfigParser):
             f.write(response.content)
 
         print(end="\x1b[2K")
-        print(f"{i+1}/{len(playeridlist)} downloaded! ({filename})", end="\r")
+        print(f"{i + 1}/{len(playeridlist)} downloaded! ({filename})", end="\r")
     print()

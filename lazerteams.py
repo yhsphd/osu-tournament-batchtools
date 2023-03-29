@@ -31,8 +31,8 @@ def generate_lazer_teams(config: ConfigParser):
         })
         print(end="\x1b[2K")
         print(
-            f"{i+1}/{len(playersinfo['users'])} added! ({playersinfo['users'][i]['username']})", end="\r")
+            f"{i + 1}/{len(playersinfo['users'])} added! ({playersinfo['users'][i]['username']})", end="\r")
     print()
 
     with open(f"{WORKING_FOLDER}/lazerteams.json", "w") as f:
-        f.write(json.dumps(teams)[1:-1])    # remove top bracket
+        f.write(json.dumps(teams)[1:-1])  # remove top bracket

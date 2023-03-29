@@ -31,7 +31,7 @@ def get_players_info(config: ConfigParser, mode: int):
     """
 
     WORKING_FOLDER = "working folders/" + \
-        config["paths"]["working_folder"].rstrip("/")
+                     config["paths"]["working_folder"].rstrip("/")
     MODE = config["osu"]["mode"]
     API_URL = config["api"]["api_url"].rstrip("/")
 
@@ -43,7 +43,7 @@ def get_players_info(config: ConfigParser, mode: int):
 
     headers = get_token(config)
 
-    if mode == 0:     # id list
+    if mode == 0:  # id list
         with open(f"./{WORKING_FOLDER}/ids.csv", "r") as f:
             idlist = f.read().rstrip().split("\n")
 
@@ -59,14 +59,14 @@ def get_players_info(config: ConfigParser, mode: int):
                     f"No key named 'username' for player {idlist[i]}. osu! api response:\n{json.dumps(response, indent=2)}")
             print(end="\x1b[2K")
             print(
-                f"{i+1}/{len(idlist)} downloaded! ({nicklist[i]})", end="\r")
+                f"{i + 1}/{len(idlist)} downloaded! ({nicklist[i]})", end="\r")
         print()
 
         # generate nicks.csv
         with open(f"{WORKING_FOLDER}/nicks.csv", "w") as f:
             f.write("\n".join(nicklist))
 
-    elif mode == 1:   # nick list
+    elif mode == 1:  # nick list
         with open(f"./{WORKING_FOLDER}/nicks.csv", "r") as f:
             nicklist = f.read().rstrip().split("\n")
 
@@ -82,7 +82,7 @@ def get_players_info(config: ConfigParser, mode: int):
             playersinfo["users"].append(response)
             print(end="\x1b[2K")
             print(
-                f"{i+1}/{len(nicklist)} downloaded! ({nicklist[i]})", end="\r")
+                f"{i + 1}/{len(nicklist)} downloaded! ({nicklist[i]})", end="\r")
         print()
 
         # generate ids.csv

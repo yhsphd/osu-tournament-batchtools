@@ -16,6 +16,6 @@ def create_config():
     config["osu"] = {
         "mode": "osu"
     }
-    
+
     with open("./settings.ini", "w") as f:
         config.write(f)

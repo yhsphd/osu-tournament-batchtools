@@ -28,9 +28,9 @@ def main():
             os.makedirs(WORKING_FOLDER)
 
         print()
-        print("-"*41)
+        print("-" * 41)
         print(" - yhsphd's osu tournament batch tools -")
-        print("-"*41)
+        print("-" * 41)
         print()
         print(f"Current working folder: [{WORKING_FOLDER}]")
         print()

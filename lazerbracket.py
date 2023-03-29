@@ -35,17 +35,17 @@ def generate_lazer_bracket(config: ConfigParser):
     roundnames = [{
         8: "Quarterfinals",
         4: "Semifinals",
-        2: "Final"          # single elimination
+        2: "Final"  # single elimination
     }, {
         8: "Quarterfinals",
         4: "Semifinals",
         2: "Finals",
-        1: "Grand Finals"   # double elimination
+        1: "Grand Finals"  # double elimination
     }]
 
     players = int(input("Number of players: "))
 
-    if not ((players & (players-1) == 0) and players != 0):
+    if not ((players & (players - 1) == 0) and players != 0):
         print("The number of players is not power of 2!")
         exit()
 
@@ -93,7 +93,7 @@ def generate_lazer_bracket(config: ConfigParser):
         if n == 1:
             # last match
             position[0] -= 100
-            position[1] = winnerYorigin + 100 * int(math.pow(2, week-3)) - 50
+            position[1] = winnerYorigin + 100 * int(math.pow(2, week - 3)) - 50
             matches["Matches"].append(lazer_match(id, False, position))
             rounds["Rounds"][-1]["Matches"].append(id)  # grand final
             id += 1
@@ -103,7 +103,7 @@ def generate_lazer_bracket(config: ConfigParser):
             id += 1
             position[0] -= 200
             position[1] = loserYorigin + 100 * \
-                int(math.pow(2, week-(4-fwl))) - 50
+                          int(math.pow(2, week - (4 - fwl))) - 50
             matches["Matches"].append(lazer_match(id, True, position))
             rounds["Rounds"][-1]["Matches"].append(id)  # losers final
             id += 1
@@ -112,49 +112,49 @@ def generate_lazer_bracket(config: ConfigParser):
         # generate winner bracket matches
         position[1] = winnerYorigin
         if week != 1:
-            position[1] += 100 * int(math.pow(2, week-2)) - 50
-        for i in range(n//2):
+            position[1] += 100 * int(math.pow(2, week - 2)) - 50
+        for i in range(n // 2):
             matches["Matches"].append(lazer_match(id, False, position))
             rounds["Rounds"][-1]["Matches"].append(id)
             id += 1
-            position[1] += 100 * int(math.pow(2, week-1))
+            position[1] += 100 * int(math.pow(2, week - 1))
         position[0] += 400 if de else 200
 
-        if not loserYorigin:    # set loser bracket Y position
+        if not loserYorigin:  # set loser bracket Y position
             loserYorigin = position[1] + 200
 
         # generte loser bracket matches
-        if de and week >= 2-fwl:
+        if de and week >= 2 - fwl:
             position[0] -= 500
             position[1] = loserYorigin
 
             # phase 1: week 3 or later, week 2 or later for fwl
-            if week != 2-fwl:
-                if week != 3-fwl:
-                    position[1] += 100 * int(math.pow(2, week-(4-fwl))) - 50
+            if week != 2 - fwl:
+                if week != 3 - fwl:
+                    position[1] += 100 * int(math.pow(2, week - (4 - fwl))) - 50
                 for i in range(n):
                     matches["Matches"].append(lazer_match(id, True, position))
                     rounds["Rounds"][-1]["Matches"].append(id)
                     id += 1
-                    position[1] += 100 * int(math.pow(2, week-(3-fwl)))
+                    position[1] += 100 * int(math.pow(2, week - (3 - fwl)))
             position[0] += 200
 
             # phase 2
             position[1] = loserYorigin
-            if week != 2-fwl:
-                position[1] += 100 * int(math.pow(2, week-(3-fwl))) - 50
-            for i in range(n//2):
+            if week != 2 - fwl:
+                position[1] += 100 * int(math.pow(2, week - (3 - fwl))) - 50
+            for i in range(n // 2):
                 matches["Matches"].append(lazer_match(id, True, position))
                 rounds["Rounds"][-1]["Matches"].append(id)
                 id += 1
-                position[1] += 100 * int(math.pow(2, week-(2-fwl)))
+                position[1] += 100 * int(math.pow(2, week - (2 - fwl)))
             position[0] += 300
 
         # for next round
-        n = n//2
+        n = n // 2
         week += 1
 
-    print(f"{id-1} matches created.")
+    print(f"{id - 1} matches created.")
     print("Please setup the following manually:")
     print("\t- mappools")
     print("\t- round start date")
@@ -163,6 +163,6 @@ def generate_lazer_bracket(config: ConfigParser):
     print("\t- assigning players to matches")
 
     with open(f"{WORKING_FOLDER}/lazerrounds.json", "w") as f:
-        f.write(json.dumps(rounds)[1:-1])   # remove top bracket
+        f.write(json.dumps(rounds)[1:-1])  # remove top bracket
     with open(f"{WORKING_FOLDER}/lazermatches.json", "w") as f:
         f.write(json.dumps(matches)[1:-1])  # remove top bracket
