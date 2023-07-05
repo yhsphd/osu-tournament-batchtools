@@ -29,9 +29,7 @@ def generate_lazer_teams(config: ConfigParser):
             "LastYearPlacing": 1,
             "Players": []
         })
-        print(end="\x1b[2K")
-        print(
-            f"{i + 1}/{len(playersinfo['users'])} added! ({playersinfo['users'][i]['username']})", end="\r")
+        print(f"{i + 1}/{len(playersinfo['users'])} added! ({playersinfo['users'][i]['username']})")
     print()
 
     with open(f"{WORKING_FOLDER}/lazerteams.json", "w") as f:

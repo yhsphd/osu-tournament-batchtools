@@ -68,5 +68,5 @@ def download_pfps(config: ConfigParser):
         with open(f"{WORKING_FOLDER}/pfps/{filename}", "wb") as f:
             f.write(response.content)
 
-        print(end="\x1b[2K")
+        print(f"{i + 1}/{len(playeridlist)} downloaded! ({filename})")
     print()

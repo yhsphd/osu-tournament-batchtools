@@ -80,9 +80,7 @@ def get_players_info(config: ConfigParser, mode: int):
                 print(
                     f"No key named 'id' for player {nicklist[i]}. osu! api response:\n{json.dumps(response, indent=2)}")
             playersinfo["users"].append(response)
-            print(end="\x1b[2K")
-            print(
-                f"{i + 1}/{len(nicklist)} downloaded! ({nicklist[i]})", end="\r")
+            print(f"{i + 1}/{len(nicklist)} downloaded! ({nicklist[i]})")
         print()
 
         # generate ids.csv
